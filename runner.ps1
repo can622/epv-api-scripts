@@ -81,11 +81,10 @@ if (-not (Test-Path $modulePath)) {
 Import-Module $modulePath -Force
 
 # --- Build Privilege Cloud URL ---
-$PCloudURL = "https://$PCloudSubdomain.privilegecloud.cyberark.cloud"
-$PVWAURL   = "$PCloudURL/PasswordVault"
+$PVWAURL = "https://$PCloudSubdomain.privilegecloud.cyberark.cloud/PasswordVault"
 
 # --- Authenticate ---
-$authParams = @{ PCloudURL = $PCloudURL }
+$authParams = @{ PCloudURL = $PVWAURL }
 
 if ($UPCreds) {
     $authParams['UPCreds'] = $UPCreds
@@ -98,7 +97,7 @@ else {
     $authParams['IdentityUserName'] = $IdentityUserName
 }
 
-Write-Host "Authenticating to $PCloudURL ..." -ForegroundColor Cyan
+Write-Host "Authenticating to $PVWAURL ..." -ForegroundColor Cyan
 $logonToken = Get-IdentityHeader @authParams
 Write-Host 'Authentication successful.' -ForegroundColor Green
 
