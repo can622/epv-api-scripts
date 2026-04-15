@@ -16,6 +16,10 @@
     .\runner.ps1 -PCloudSubdomain "mycompany" -Add -SafeName "MySafe"
 
 .EXAMPLE
+    # Add safes from a CSV file (prompted for credentials)
+    .\runner.ps1 -PCloudSubdomain "mycompany" -Add -FilePath ".\safes.csv"
+
+.EXAMPLE
     # Login with pre-built credentials
     $creds = Get-Credential
     .\runner.ps1 -PCloudSubdomain "mycompany" -UPCreds $creds -Report
@@ -57,7 +61,12 @@ param(
     [switch]$Members,
 
     [Parameter(HelpMessage = 'Safe name')]
-    [string]$SafeName
+    [string]$SafeName,
+
+    [Parameter(HelpMessage = 'Path to a CSV file for bulk operations')]
+    [Alias('File')]
+    [ValidateScript({ $_ -match '\.csv$' })]
+    [string]$FilePath
 )
 
 $ErrorActionPreference = 'Stop'
@@ -115,6 +124,7 @@ if ($DeleteMembers) { $smParams['DeleteMembers'] = $true }
 if ($Members)       { $smParams['Members']       = $true }
 
 if ($SafeName) { $smParams['SafeName'] = $SafeName }
+if ($FilePath) { $smParams['FilePath'] = $FilePath }
 
 # --- Run Safe-Management ---
 Write-Host "Running Safe-Management ..." -ForegroundColor Cyan
