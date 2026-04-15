@@ -343,6 +343,7 @@ function Invoke-Challenge {
         # Check if we have a token (successful authentication)
         if ($finalResponse.PSObject.Properties['success'] -and
             $finalResponse.success -and
+            $finalResponse.Result.PSObject.Properties['Token'] -and
             $finalResponse.Result.Token) {
             Write-Verbose "Token received successfully"
             return $finalResponse
@@ -958,7 +959,8 @@ function Get-IdentityHeader {
     Write-Verbose "Response properties: $($answerResponse.PSObject.Properties.Name -join ', ')"
     Write-Verbose "Response JSON: $($answerResponse | ConvertTo-Json -Depth 5 -Compress)"
 
-    if ($answerResponse.PSObject.Properties['success'] -and $answerResponse.success -and $answerResponse.Result.Token) {
+    if ($answerResponse.PSObject.Properties['success'] -and $answerResponse.success -and
+        $answerResponse.Result.PSObject.Properties['Token'] -and $answerResponse.Result.Token) {
         $token = $answerResponse.Result.Token
         # PS5.1: No ternary operator
         if ($answerResponse.Result.PSObject.Properties['TokenLifetime']) {
