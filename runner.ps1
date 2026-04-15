@@ -66,7 +66,10 @@ param(
     [Parameter(HelpMessage = 'Path to a CSV file for bulk operations')]
     [Alias('File')]
     [ValidateScript({ $_ -match '\.csv$' })]
-    [string]$FilePath
+    [string]$FilePath,
+
+    [Parameter(HelpMessage = 'If a member does not exist during update, attempt to add them')]
+    [switch]$AddOnUpdate
 )
 
 $ErrorActionPreference = 'Stop'
@@ -122,8 +125,9 @@ if ($UpdateMembers) { $smParams['UpdateMembers'] = $true }
 if ($DeleteMembers) { $smParams['DeleteMembers'] = $true }
 if ($Members)       { $smParams['Members']       = $true }
 
-if ($SafeName) { $smParams['SafeName'] = $SafeName }
-if ($FilePath) { $smParams['FilePath'] = $FilePath }
+if ($SafeName)    { $smParams['SafeName']    = $SafeName }
+if ($FilePath)    { $smParams['FilePath']    = $FilePath }
+if ($AddOnUpdate) { $smParams['AddOnUpdate'] = $true }
 
 # --- Run Safe-Management ---
 Write-Host "Running Safe-Management ..." -ForegroundColor Cyan
